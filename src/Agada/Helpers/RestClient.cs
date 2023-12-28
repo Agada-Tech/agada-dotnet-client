@@ -38,6 +38,11 @@ namespace Agada.Helpers
             return SendAsync<T>(route, HttpMethod.Post, options, cancellationToken, request);
         }
 
+        public static Task PostAsync(string route, AgadaOptions options, object request, CancellationToken cancellationToken)
+        {
+            return SendAsync(route, HttpMethod.Post, options, cancellationToken, request);
+        }
+
         public static Task<T> PutAsync<T>(string route, AgadaOptions options, object request, CancellationToken cancellationToken)
         {
             return SendAsync<T>(route, HttpMethod.Put, options, cancellationToken, request);
@@ -58,7 +63,12 @@ namespace Agada.Helpers
             return Send<T>(route, HttpMethod.Post, options, request);
         }
 
-        public static T Put<T>(string route, AgadaOptions options,  object request)
+        public static void Post(string route, AgadaOptions options, object request)
+        {
+            Send(route, HttpMethod.Post, options, request);
+        }
+
+        public static T Put<T>(string route, AgadaOptions options, object request)
         {
             return Send<T>(route, HttpMethod.Put, options, request);
         }
@@ -68,7 +78,7 @@ namespace Agada.Helpers
             return Send<T>(route, HttpMethod.Delete, options, null);
         }
 
-        
+
         #region Private Methods
 
         private static HttpRequestMessage BuildRequestMessage(string route, HttpMethod httpMethod, AgadaOptions options, object request)
@@ -77,9 +87,10 @@ namespace Agada.Helpers
             {
                 Method = httpMethod,
                 RequestUri = new Uri($"{options.BaseUrl}{route}"),
-                Content = PrepareContent(request)
             };
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("", options.ApiKey);
+            if (request != null)
+                requestMessage.Content = PrepareContent(request);
+            requestMessage.Headers.TryAddWithoutValidation("Authorization", options.ApiKey);
             requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.Culture, options.Culture);
             requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.ChannelName, options.ChannelName);
             return requestMessage;
@@ -107,7 +118,7 @@ namespace Agada.Helpers
             if (!httpResponseMessage.IsSuccessStatusCode)
                 throw new AgadaException(httpResponseMessage.StatusCode, httpResponseMessage.ReasonPhrase);
 
-            return (T)Convert.ChangeType(content, typeof(T));
+            return (T) Convert.ChangeType(content, typeof(T));
         }
 
         private static StringContent PrepareContent(object request)
@@ -140,6 +151,33 @@ namespace Agada.Helpers
                 var httpResponseMessage = await _httpClient.SendAsync(requestMessage, cancellationToken);
                 var content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
                 return HandleResponse<T>(httpResponseMessage, content);
+            }
+            catch (Exception e)
+            {
+                throw new AgadaException(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        private static void Send(string route, HttpMethod httpMethod, AgadaOptions options, object request)
+        {
+            try
+            {
+                var requestMessage = BuildRequestMessage(route, httpMethod, options, request);
+                _ = _httpClient.SendAsync(requestMessage).Result;
+            }
+            catch (Exception e)
+            {
+                throw new AgadaException(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        private static async Task SendAsync(string route, HttpMethod httpMethod, AgadaOptions options, CancellationToken cancellationToken, object request = null)
+        {
+            try
+            {
+                var requestMessage = BuildRequestMessage(route, httpMethod, options, request);
+                await _httpClient.SendAsync(requestMessage, cancellationToken);
             }
             catch (Exception e)
             {
