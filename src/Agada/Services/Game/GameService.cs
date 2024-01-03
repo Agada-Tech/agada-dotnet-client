@@ -21,36 +21,42 @@ namespace Agada.Services.Game
 
         public PlayerInfoModel GetPlayerInfo(string playerId)
         {
-            var response = RestClient.Get<PlayerInfoModel>($"/game/v1/player/{playerId}/info", _options);
+            var request = new HttpRequestModel($"/game/v1/player/{playerId}/info", _options);
+            var response = RestClient.Get<PlayerInfoModel>(request);
             return response;
         }
 
         public async Task<PlayerInfoModel> GetPlayerInfoAsync(string playerId, CancellationToken cancellationToken = default)
         {
-            var response = await RestClient.GetAsync<PlayerInfoModel>($"/game/v1/player/{playerId}/info", _options, cancellationToken);
+            var request = new HttpRequestModel($"/game/v1/player/{playerId}/info", _options);
+            var response = await RestClient.GetAsync<PlayerInfoModel>(request, cancellationToken);
             return response;
         }
 
         public List<PlayerAchievementModel> GetPlayerAchievements(string playerId)
         {
-            var response = RestClient.Get<List<PlayerAchievementModel>>($"/game/v1/player/{playerId}/achievement", _options);
+            var request = new HttpRequestModel($"/game/v1/player/{playerId}/achievement", _options);
+            var response = RestClient.Get<List<PlayerAchievementModel>>(request);
             return response;
         }
 
         public async Task<List<PlayerAchievementModel>> GetPlayerAchievementsAsync(string playerId, CancellationToken cancellationToken = default)
         {
-            var response = await RestClient.GetAsync<List<PlayerAchievementModel>>($"/game/v1/player/{playerId}/achievement", _options, cancellationToken);
+            var request = new HttpRequestModel($"/game/v1/player/{playerId}/achievement", _options);
+            var response = await RestClient.GetAsync<List<PlayerAchievementModel>>(request, cancellationToken);
             return response;
         }
 
         public void SetPlayerAvatar(string playerId, string avatarId)
         {
-            RestClient.Post($"/game/v1/player/{playerId}/avatar", _options, new {AvatarId = avatarId});
+            var request = new HttpRequestModel($"/game/v1/player/{playerId}/avatar", _options, new {AvatarId = avatarId});
+            RestClient.Post(request);
         }
 
         public async Task SetPlayerAvatarAsync(string playerId, string avatarId, CancellationToken cancellationToken = default)
         {
-            await RestClient.PostAsync($"/game/v1/player/{playerId}/avatar", _options, new {AvatarId = avatarId}, cancellationToken);
+            var request = new HttpRequestModel($"/game/v1/player/{playerId}/avatar", _options, new {AvatarId = avatarId});
+            await RestClient.PostAsync(request, cancellationToken);
         }
 
 
@@ -70,7 +76,8 @@ namespace Agada.Services.Game
                     url += $"?playerId={playerId}";
             }
 
-            var response = RestClient.Get<List<StandingModel>>(url, _options);
+            var request = new HttpRequestModel(url, _options);
+            var response = RestClient.Get<List<StandingModel>>(request);
             return response;
         }
 
@@ -91,19 +98,22 @@ namespace Agada.Services.Game
                     url += $"?playerId={playerId}";
             }
 
-            var response = await RestClient.GetAsync<List<StandingModel>>(url, _options, cancellationToken);
+            var request = new HttpRequestModel(url, _options);
+            var response = await RestClient.GetAsync<List<StandingModel>>(request, cancellationToken);
             return response;
         }
 
         public LeaderboardSnapshotModel GetLeaderboardSnapshot(string leaderboardId, DateTime date)
         {
-            var response = RestClient.Get<LeaderboardSnapshotModel>($"/game/v1/leaderboard/{leaderboardId}/archive?date={date:O}", _options);
+            var request = new HttpRequestModel($"/game/v1/leaderboard/{leaderboardId}/archive?date={date:O}", _options);
+            var response = RestClient.Get<LeaderboardSnapshotModel>(request);
             return response;
         }
 
         public async Task<LeaderboardSnapshotModel> GetLeaderboardSnapshotAsync(string leaderboardId, DateTime date, CancellationToken cancellationToken = default)
         {
-            var response = await RestClient.GetAsync<LeaderboardSnapshotModel>($"/game/v1/leaderboard/{leaderboardId}/archive?date={date:O}", _options, cancellationToken);
+            var request = new HttpRequestModel($"/game/v1/leaderboard/{leaderboardId}/archive?date={date:O}", _options);
+            var response = await RestClient.GetAsync<LeaderboardSnapshotModel>(request, cancellationToken);
             return response;
         }
     }

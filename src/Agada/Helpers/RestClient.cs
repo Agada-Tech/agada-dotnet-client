@@ -29,71 +29,75 @@ namespace Agada.Helpers
             _httpClient = new HttpClient(handler);
         }
 
-        public static Task<T> GetAsync<T>(string route, AgadaOptions options, CancellationToken cancellationToken)
+        public static Task<T> GetAsync<T>(HttpRequestModel request, CancellationToken cancellationToken)
         {
-            return SendAsync<T>(route, HttpMethod.Get, options, cancellationToken);
+            return SendAsync<T>(request, HttpMethod.Get, cancellationToken);
         }
 
-        public static Task<T> PostAsync<T>(string route, AgadaOptions options, object request, CancellationToken cancellationToken)
+        public static Task<T> PostAsync<T>(HttpRequestModel request, CancellationToken cancellationToken)
         {
-            return SendAsync<T>(route, HttpMethod.Post, options, cancellationToken, request);
+            return SendAsync<T>(request, HttpMethod.Post, cancellationToken);
         }
 
-        public static Task PostAsync(string route, AgadaOptions options, object request, CancellationToken cancellationToken)
+        public static Task PostAsync(HttpRequestModel request, CancellationToken cancellationToken)
         {
-            return SendAsync(route, HttpMethod.Post, options, cancellationToken, request);
+            return SendAsync(request, HttpMethod.Post, cancellationToken);
         }
 
-        public static Task<T> PutAsync<T>(string route, AgadaOptions options, object request, CancellationToken cancellationToken)
+        public static Task<T> PutAsync<T>(HttpRequestModel request, CancellationToken cancellationToken)
         {
-            return SendAsync<T>(route, HttpMethod.Put, options, cancellationToken, request);
+            return SendAsync<T>(request, HttpMethod.Put, cancellationToken);
         }
 
-        public static Task DeleteAsync<T>(string route, AgadaOptions options, CancellationToken cancellationToken)
+        public static Task DeleteAsync<T>(HttpRequestModel request, CancellationToken cancellationToken)
         {
-            return SendAsync<T>(route, HttpMethod.Delete, options, cancellationToken);
+            return SendAsync<T>(request, HttpMethod.Delete, cancellationToken);
         }
 
-        public static T Get<T>(string route, AgadaOptions options, Dictionary<string, string> headers = null)
+        public static T Get<T>(HttpRequestModel request)
         {
-            return Send<T>(route, HttpMethod.Get, options, null);
+            return Send<T>(request, HttpMethod.Get);
         }
 
-        public static T Post<T>(string route, AgadaOptions options, object request)
+        public static T Post<T>(HttpRequestModel request)
         {
-            return Send<T>(route, HttpMethod.Post, options, request);
+            return Send<T>(request, HttpMethod.Post);
         }
 
-        public static void Post(string route, AgadaOptions options, object request)
+        public static void Post(HttpRequestModel request)
         {
-            Send(route, HttpMethod.Post, options, request);
+            Send(request, HttpMethod.Post);
         }
 
-        public static T Put<T>(string route, AgadaOptions options, object request)
+        public static T Put<T>(HttpRequestModel request)
         {
-            return Send<T>(route, HttpMethod.Put, options, request);
+            return Send<T>(request, HttpMethod.Put);
         }
 
-        public static T Delete<T>(string route, AgadaOptions options)
+        public static T Delete<T>(HttpRequestModel request)
         {
-            return Send<T>(route, HttpMethod.Delete, options, null);
+            return Send<T>(request, HttpMethod.Delete);
         }
 
 
         #region Private Methods
 
-        private static HttpRequestMessage BuildRequestMessage(string route, HttpMethod httpMethod, AgadaOptions options, object request)
+        private static HttpRequestMessage BuildRequestMessage(HttpRequestModel request, HttpMethod httpMethod)
         {
             var requestMessage = new HttpRequestMessage
             {
                 Method = httpMethod,
-                RequestUri = new Uri($"{options.BaseUrl}{route}"),
+                RequestUri = new Uri($"{request.Options.BaseUrl}{request.Route}"),
             };
-            if (request != null)
-                requestMessage.Content = PrepareContent(request);
-            requestMessage.Headers.TryAddWithoutValidation("Authorization", options.ApiKey);
-            requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.Culture, options.Culture);
-            requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.ChannelName, options.ChannelName);
+            if (request.Body != null)
+                requestMessage.Content = PrepareContent(request.Body);
+
+            if (request.UserId != null)
+                requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.UserId, request.UserId);
+
+            requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.Authorization, request.Options.ApiKey);
+            requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.Culture, request.Options.Culture);
+            requestMessage.Headers.TryAddWithoutValidation(AgadaRequestHeaders.ChannelName, request.Options.ChannelName);
             return requestMessage;
         }
 
@@ -129,11 +133,11 @@ namespace Agada.Helpers
             return new StringContent(body, Encoding.UTF8, "application/json");
         }
 
-        private static T Send<T>(string route, HttpMethod httpMethod, AgadaOptions options, object request)
+        private static T Send<T>(HttpRequestModel request, HttpMethod httpMethod)
         {
             try
             {
-                var requestMessage = BuildRequestMessage(route, httpMethod, options, request);
+                var requestMessage = BuildRequestMessage(request, httpMethod);
                 var httpResponseMessage = _httpClient.SendAsync(requestMessage).Result;
                 var content = httpResponseMessage.Content.ReadAsByteArrayAsync().Result;
                 return HandleResponse<T>(httpResponseMessage, content);
@@ -144,11 +148,11 @@ namespace Agada.Helpers
             }
         }
 
-        private static async Task<T> SendAsync<T>(string route, HttpMethod httpMethod, AgadaOptions options, CancellationToken cancellationToken, object request = null)
+        private static async Task<T> SendAsync<T>(HttpRequestModel request, HttpMethod httpMethod, CancellationToken cancellationToken)
         {
             try
             {
-                var requestMessage = BuildRequestMessage(route, httpMethod, options, request);
+                var requestMessage = BuildRequestMessage(request, httpMethod);
                 var httpResponseMessage = await _httpClient.SendAsync(requestMessage, cancellationToken);
                 var content = await httpResponseMessage.Content.ReadAsByteArrayAsync();
                 return HandleResponse<T>(httpResponseMessage, content);
@@ -160,11 +164,11 @@ namespace Agada.Helpers
         }
 
 
-        private static void Send(string route, HttpMethod httpMethod, AgadaOptions options, object request)
+        private static void Send(HttpRequestModel request, HttpMethod httpMethod)
         {
             try
             {
-                var requestMessage = BuildRequestMessage(route, httpMethod, options, request);
+                var requestMessage = BuildRequestMessage(request, httpMethod);
                 _ = _httpClient.SendAsync(requestMessage).Result;
             }
             catch (Exception e)
@@ -173,11 +177,11 @@ namespace Agada.Helpers
             }
         }
 
-        private static async Task SendAsync(string route, HttpMethod httpMethod, AgadaOptions options, CancellationToken cancellationToken, object request = null)
+        private static async Task SendAsync(HttpRequestModel request, HttpMethod httpMethod, CancellationToken cancellationToken)
         {
             try
             {
-                var requestMessage = BuildRequestMessage(route, httpMethod, options, request);
+                var requestMessage = BuildRequestMessage(request, httpMethod);
                 await _httpClient.SendAsync(requestMessage, cancellationToken);
             }
             catch (Exception e)
