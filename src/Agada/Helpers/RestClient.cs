@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -53,7 +54,7 @@ namespace Agada.Helpers
             return SendAsync<T>(route, HttpMethod.Delete, options, cancellationToken);
         }
 
-        public static T Get<T>(string route, AgadaOptions options)
+        public static T Get<T>(string route, AgadaOptions options, Dictionary<string, string> headers = null)
         {
             return Send<T>(route, HttpMethod.Get, options, null);
         }
