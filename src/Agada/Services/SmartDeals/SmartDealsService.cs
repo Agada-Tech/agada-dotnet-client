@@ -26,7 +26,7 @@ namespace Agada.Services.SmartDeals
         public async Task<OfferResponseModel> GetNewOfferAsync(string userId, OfferRequestModel request, CancellationToken cancellationToken = default)
         {
             var httpRequest = new HttpRequestModel("/cat/v1/offer", _options, request, userId);
-            return await RestClient.PostAsync<OfferResponseModel>(httpRequest, cancellationToken);
+            return await RestClient.GetAsync<OfferResponseModel>(httpRequest, cancellationToken);
         }
 
         public OfferResponseModel GetActiveOffer(string userId)

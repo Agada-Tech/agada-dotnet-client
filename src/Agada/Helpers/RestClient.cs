@@ -49,9 +49,20 @@ namespace Agada.Helpers
             return SendAsync<T>(request, HttpMethod.Put, cancellationToken);
         }
 
+
+        public static Task PutAsync(HttpRequestModel request, CancellationToken cancellationToken)
+        {
+            return SendAsync(request, HttpMethod.Put, cancellationToken);
+        }
+
         public static Task DeleteAsync<T>(HttpRequestModel request, CancellationToken cancellationToken)
         {
             return SendAsync<T>(request, HttpMethod.Delete, cancellationToken);
+        }
+
+        public static Task DeleteAsync(HttpRequestModel request, CancellationToken cancellationToken)
+        {
+            return SendAsync(request, HttpMethod.Delete, cancellationToken);
         }
 
         public static T Get<T>(HttpRequestModel request)
@@ -74,9 +85,19 @@ namespace Agada.Helpers
             return Send<T>(request, HttpMethod.Put);
         }
 
+        public static void Put(HttpRequestModel request)
+        {
+            Send(request, HttpMethod.Put);
+        }
+
         public static T Delete<T>(HttpRequestModel request)
         {
             return Send<T>(request, HttpMethod.Delete);
+        }
+
+        public static void Delete(HttpRequestModel request)
+        {
+            Send(request, HttpMethod.Delete);
         }
 
 
