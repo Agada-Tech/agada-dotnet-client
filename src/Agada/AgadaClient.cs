@@ -2,6 +2,8 @@ using Agada.Contracts;
 using Agada.Models;
 using Agada.Services.Adm;
 using Agada.Services.Game;
+using Agada.Services.Promotion;
+using Agada.Services.SmartDeals;
 
 namespace Agada
 {
@@ -9,6 +11,8 @@ namespace Agada
     {
         public IAdmService Adm { get; }
         public IGameService Game { get; }
+        public IPromotionService Promotion { get; }
+        public ISmartDealsService SmartDeals { get; }
 
         public AgadaClient()
         {
@@ -18,6 +22,8 @@ namespace Agada
         {
             Adm = new AdmService(options);
             Game = new GameService(options);
+            Promotion = new PromotionService(options);
+            SmartDeals = new SmartDealsService(options);
         }
     }
 }
