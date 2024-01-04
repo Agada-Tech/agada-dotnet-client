@@ -19,15 +19,15 @@ namespace Agada.Services.Adm
 
         public Zone GetZoneContent(string zoneKey, Dictionary<string, object> metadata)
         {
-            var request = new HttpRequestModel($"/adm/v1/zone?key={zoneKey}", _options, new {metadata});
-            var response = RestClient.Post<Zone>(request);
+            var httpRequest = new HttpRequestModel($"/adm/v1/zone?key={zoneKey}", _options, new {metadata});
+            var response = RestClient.Post<Zone>(httpRequest);
             return response;
         }
 
         public async Task<Zone> GetZoneContentAsync(string zoneKey, Dictionary<string, object> metadata, CancellationToken cancellationToken)
         {
-            var request = new HttpRequestModel($"/adm/v1/zone?key={zoneKey}", _options, new {metadata});
-            var response = await RestClient.PostAsync<Zone>(request, cancellationToken);
+            var httpRequest = new HttpRequestModel($"/adm/v1/zone?key={zoneKey}", _options, new {metadata});
+            var response = await RestClient.PostAsync<Zone>(httpRequest, cancellationToken);
             return response;
         }
     }
