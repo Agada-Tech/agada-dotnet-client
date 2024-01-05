@@ -9,6 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{285F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConsoleApp", "samples\SampleConsoleApp\SampleConsoleApp.csproj", "{628316EC-B07E-4975-81D6-CC83E1570D9C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC43D7C0-2DBB-4EBE-B80A-E75C1687678C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agada.Tests", "tests\Agada.Tests\Agada.Tests.csproj", "{423A2517-B293-4A28-919B-17D38A242A2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,8 +30,13 @@ Global
 		{628316EC-B07E-4975-81D6-CC83E1570D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{628316EC-B07E-4975-81D6-CC83E1570D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{628316EC-B07E-4975-81D6-CC83E1570D9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{423A2517-B293-4A28-919B-17D38A242A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{423A2517-B293-4A28-919B-17D38A242A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{423A2517-B293-4A28-919B-17D38A242A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{423A2517-B293-4A28-919B-17D38A242A2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{628316EC-B07E-4975-81D6-CC83E1570D9C} = {285FD6E2-BBA5-418A-9C2E-A72065BCD532}
+		{423A2517-B293-4A28-919B-17D38A242A2B} = {AC43D7C0-2DBB-4EBE-B80A-E75C1687678C}
 	EndGlobalSection
 EndGlobal
