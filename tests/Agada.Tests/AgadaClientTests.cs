@@ -1,25 +1,26 @@
-﻿using Agada.Models;
-using Xunit;
+using Agada.Models;
+using NUnit.Framework;
 
-namespace Agada.Tests;
-
-public class AgadaClientTests
+namespace Agada.Tests
 {
-    [Fact]
-    public void TestAgadaClientConstructor()
+    public class AgadaClientTests
     {
-        var options = new AgadaOptions
+        [Test]
+        public void TestAgadaClientConstructor()
         {
-            Culture = "en-US",
-            ApiKey = "api-key",
-            BaseUrl = "https://gate.agada.com",
-            ChannelName = "test-client",
-        };
-        var client = new AgadaClient(options);
-        Assert.NotNull(client.Adm);
-        Assert.NotNull(client.Hub);
-        Assert.NotNull(client.Game);
-        Assert.NotNull(client.Promotion);
-        Assert.NotNull(client.SmartDeals);
+            var options = new AgadaOptions
+            {
+                Culture = "en-US",
+                ApiKey = "api-key",
+                BaseUrl = "https://gate.agada.com",
+                ChannelName = "test-client",
+            };
+            var client = new AgadaClient(options);
+            Assert.NotNull(client.Adm);
+            Assert.NotNull(client.Hub);
+            Assert.NotNull(client.Game);
+            Assert.NotNull(client.Promotion);
+            Assert.NotNull(client.SmartDeals);
+        }
     }
 }
