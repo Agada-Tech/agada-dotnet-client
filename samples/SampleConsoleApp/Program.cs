@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Agada;
 using Agada.Constants;
 using Agada.Models;
+using Agada.Services.Hub.Requests;
 
 namespace SampleConsoleApp
 {
@@ -10,8 +13,10 @@ namespace SampleConsoleApp
         public static void Main(string[] args)
         {
             Console.WriteLine("Agada Sample Console App");
+
+            var agadaOptions = new AgadaOptions(AgadaEnvironment.Production, "<API-KEY>", "<CULTURE>", "<CHANNEL-NAME>");
+            var client = new AgadaClient(agadaOptions);
             
-            var client = new AgadaClient(new AgadaOptions(AgadaEnvironment.Sandbox, "04e8b133-296e-44d3-bdb8-6d1a70ff1431", "en-US", "desktop-web"));
             var playerId = "95ceacfd-4fa0-4db0-950b-a5f7939ef5d2";
             var playerInfo = client.Game.GetPlayerInfo(playerId);
             Console.WriteLine($"Player Info: {playerInfo.DisplayName}");
