@@ -20,13 +20,13 @@ namespace Agada.Services.Hub
 
         public void SendEvent(SendEventRequest request)
         {
-            var httpRequest = new HttpRequestModel($"/hub/v1/event", _options, new { request });
+            var httpRequest = new HttpRequestModel($"/hub/v1/event", _options, request);
             RestClient.Post(httpRequest);
         }
 
         public async Task SendEventAsync(SendEventRequest request, CancellationToken cancellationToken)
         {
-            var httpRequest = new HttpRequestModel($"/hub/v1/event", _options, new { request });
+            var httpRequest = new HttpRequestModel($"/hub/v1/event", _options, request);
             await RestClient.PostAsync(httpRequest, cancellationToken);
         }
 

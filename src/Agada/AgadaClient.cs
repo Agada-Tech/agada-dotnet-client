@@ -5,6 +5,7 @@ using Agada.Services.Game;
 using Agada.Services.Hub;
 using Agada.Services.Promotion;
 using Agada.Services.SmartDeals;
+using Agada.Services.Targeting;
 
 namespace Agada
 {
@@ -13,9 +14,10 @@ namespace Agada
         public IAdmService Adm { get; }
         public IHubService Hub { get; }
         public IGameService Game { get; }
+        public ITargetingService Targeting { get; set; }
         public IPromotionService Promotion { get; }
         public ISmartDealsService SmartDeals { get; }
-        
+
         public AgadaClient()
         {
         }
@@ -25,6 +27,7 @@ namespace Agada
             Adm = new AdmService(options);
             Hub = new HubService(options);
             Game = new GameService(options);
+            Targeting = new TargetingService(options);
             Promotion = new PromotionService(options);
             SmartDeals = new SmartDealsService(options);
         }
