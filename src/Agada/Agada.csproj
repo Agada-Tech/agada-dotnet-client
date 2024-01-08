@@ -22,5 +22,10 @@
         <PackagePath></PackagePath>
         <Link>agada-logo.png</Link>
       </None>
+        <None Include="..\..\README.md">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+            <Link>README.md</Link>
+        </None>
     </ItemGroup>
 </Project>
