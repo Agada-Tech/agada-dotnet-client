@@ -5,8 +5,6 @@
         <Copyright>Agada Tech</Copyright>
         <RepositoryUrl>https://github.com/Agada-Tech/agada-dotnet-client</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageVersion>0.0.1</PackageVersion>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>Agada</PackageId>
         <TargetFrameworks>netstandard1.3;netstandard2.0;net461</TargetFrameworks>
     </PropertyGroup>
