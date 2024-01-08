@@ -1,0 +1,31 @@
+name: Agada Dotnet Client Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  pack:
+    name: Release Library
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup dotnet 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+          source-url: https://api.nuget.org/v3/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_SECRET_KEY}}
+
+      - name: Set Package Version
+        run: echo ("PACKAGE_VERSION=" + $env:GITHUB_REF.replace('refs/tags/', '')) >> $env:GITHUB_ENV 
+    
+      - name: Pack Client Library
+        run: dotnet pack -c Release -p:PackageVersion="${{ env.PACKAGE_VERSION }}" ./src/Agada
+
+      - name: Push Packed Client Library to Nuget
+        run:  dotnet nuget push ./src/Agada/bin/Release/Agada.${{ env.PACKAGE_VERSION }}.nupkg -k $env:NUGET_SECRET_KEY
+        env: 
+          NUGET_SECRET_KEY: ${{secrets.NUGET_SECRET_KEY}}
