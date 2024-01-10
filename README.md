@@ -12,6 +12,7 @@
 ## Installation
 ```bash
 Install-Package Agada
+dotnet add package Agada
 ```
 
 ## Usage
